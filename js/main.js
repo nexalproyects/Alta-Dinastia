@@ -1,5 +1,5 @@
 /* ========= CONFIG: edita aquí el contenido ========= */
-const WA="528713596173";
+const WA="528717972928";
 const CONFIG={
   // Videos de Música: {titulo, tipo:"video|youtube|instagram", src, thumb, vertical, cors}
   // "video" = archivo alojado (mp4). El ecualizador solo reacciona si el archivo es del mismo sitio o tiene CORS (cors:true).
