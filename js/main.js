@@ -1,17 +1,23 @@
 /* ========= CONFIG: edita aquí el contenido ========= */
-const WA="528717972928";
+const WA="528713596173";
 const CONFIG={
   // Videos de Música: {titulo, tipo:"video|youtube|instagram", src, thumb, vertical, cors}
   // "video" = archivo alojado (mp4). El ecualizador solo reacciona si el archivo es del mismo sitio o tiene CORS (cors:true).
-  videos:[],
+  videos:[
+    {titulo:"En vivo · Noche en la calle",tipo:"video",src:"video/video2.mp4",thumb:"img/video2-poster.webp",vertical:true},
+    {titulo:"En vivo · Azotea",tipo:"video",src:"video/video3.mp4",thumb:"img/video3-poster.webp",vertical:true}
+  ],
   // Galería: {titulo, tipo:"foto|video|youtube|instagram", src, thumb, cat, fit}
   // Las 5 piezas siguientes son arte de la marca; sustitúyelas por fotos y videos reales.
   galeria:[
-    {tipo:"foto",bg:"var(--u-hero)",titulo:"ALTA DINASTÍA"},
-    {tipo:"foto",bg:"var(--u-banner)",titulo:"En el escenario"},
-    {tipo:"foto",bg:"var(--u-instr)",titulo:"Acordeón y guitarra"},
-    {tipo:"foto",bg:"var(--u-donde)",titulo:"Cobertura en Torreón"},
-    {tipo:"foto",bg:"var(--u-circ)",titulo:"El comienzo de algo grande",fit:"contain"}
+    {tipo:"video",titulo:"En vivo · Noche en la calle",src:"video/video2.mp4",thumb:"img/video2-poster.webp",cat:"En vivo"},
+    {tipo:"foto",bg:"var(--u-banner)",titulo:"En el escenario",cat:"Marca"},
+    {tipo:"video",titulo:"En vivo · Azotea",src:"video/video3.mp4",thumb:"img/video3-poster.webp",cat:"En vivo"},
+    {tipo:"foto",bg:"var(--u-instr)",titulo:"Acordeón y guitarra",cat:"Marca"},
+    {tipo:"foto",bg:"var(--u-circ)",titulo:"El comienzo de algo grande",fit:"contain",cat:"Marca"},
+    {tipo:"video",titulo:"Detrás de cámaras · Montaje",src:"video/video1.mp4",thumb:"img/video1-poster.webp",cat:"En vivo"},
+    {tipo:"foto",bg:"var(--u-hero)",titulo:"ALTA DINASTÍA",cat:"Marca"},
+    {tipo:"foto",bg:"var(--u-donde)",titulo:"Cobertura en Torreón",cat:"Marca"}
   ]
 };
 /* ==================================================== */
