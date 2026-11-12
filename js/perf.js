@@ -23,9 +23,9 @@
         : (cores >= 8 && mem >= 8 && !save) ? 'desktop' : 'laptop';
 
   /* flags CSS:  md = blur reducido · lite = sin mix-blend ni blur de revelado · nobd = sin backdrop-filter · still = sin gradientes animados */
-  var FX = { desktop: '', laptop: 'md', android: 'lite md', ios: 'lite md', low: 'lite md nobd still' };
+  var FX = { desktop: '', laptop: 'md', android: 'lite nobd still', ios: 'lite nobd still', low: 'lite nobd still' };
   /* n = notas flotantes · t = destellos del logo */
-  var N = { desktop: { n: 16, t: 8 }, laptop: { n: 12, t: 8 }, android: { n: 8, t: 6 }, ios: { n: 8, t: 6 }, low: { n: 4, t: 4 } };
+  var N = { desktop: { n: 16, t: 8 }, laptop: { n: 12, t: 8 }, android: { n: 6, t: 4 }, ios: { n: 6, t: 4 }, low: { n: 3, t: 2 } };
   var NEXT = { desktop: 'laptop', laptop: 'low', android: 'low', ios: 'low' }; /* solo se degrada, nunca se sube: evita parpadeos */
 
   var P = w.PERF = { profile: p, n: 0, t: 0, ios: ios, coarse: coarse, reduce: mm('(prefers-reduced-motion:reduce)'), cbs: [] };
@@ -38,14 +38,22 @@
   apply(p);
 
   /* Vigilancia de fluidez: mide ~50 fotogramas tras la carga; si el promedio supera ~30 ms baja un nivel */
+  var busy = 0;
   function probe() {
+    if (busy || d.classList.contains('hid')) return; busy = 1;
     var c = 0, sum = 0, last = 0;
     requestAnimationFrame(function s(t) {
       if (last && t - last < 250) { sum += t - last; c++; }   /* ignora pausas de pestaña oculta */
       last = t;
       if (c < 50) requestAnimationFrame(s);
-      else if (sum / c > 30 && NEXT[P.profile]) apply(NEXT[P.profile]);
+      else { busy = 0; if (sum / c > 24 && NEXT[P.profile]) apply(NEXT[P.profile]); }
     });
   }
-  w.addEventListener('load', function () { setTimeout(probe, 1500); setTimeout(probe, 7000); setTimeout(probe, 14000); });
+  w.addEventListener('load', function () { setTimeout(probe, 1500); setTimeout(probe, 7000); });
+  /* lo que importa es la fluidez AL DESLIZAR: se mide en los primeros scrolls reales */
+  var sp = 0, lp = 0;
+  w.addEventListener('scroll', function () {
+    var now = Date.now();
+    if (sp < 4 && now - lp > 4000) { sp++; lp = now; setTimeout(probe, 250); }
+  }, { passive: true });
 })();
