@@ -49,3 +49,6 @@ html[data-fx~=lite].scr .notes span,html[data-fx~=lite].scr .beams i,html[data-f
 html[data-fx~=lite].scr .marquee>div,html[data-fx~=lite].scr .sheen::before,html[data-fx~=lite].scr .btn.gold::after,
 html[data-fx~=lite].scr .art::after,html[data-fx~=lite].scr #contratar::before,html[data-fx~=lite].scr .ess::before{animation-play-state:paused!important}
 @media(hover:none),(pointer:coarse){.spot{display:none}}
+
+/* tarjetas sin texto (el nombre sigue en aria-label para lectores de pantalla) */
+.gi .cap,.vc .cap{display:none!important}
