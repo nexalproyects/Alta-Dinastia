@@ -3,10 +3,7 @@ const WA="528717972928";
 const CONFIG={
   // Videos de Música: {titulo, tipo:"video|youtube|instagram", src, thumb, vertical, cors}
   // "video" = archivo alojado (mp4). El ecualizador solo reacciona si el archivo es del mismo sitio o tiene CORS (cors:true).
-  videos:[
-    {titulo:"En vivo · Noche en la calle",tipo:"video",src:"video/video2.mp4",thumb:"img/video2-poster.webp",vertical:true},
-    {titulo:"En vivo · Azotea",tipo:"video",src:"video/video3.mp4",thumb:"img/video3-poster.webp",vertical:true}
-  ],
+  videos:[],
   // Galería: {titulo, tipo:"foto|video|youtube|instagram", src, thumb, cat, fit}
   // Las 5 piezas siguientes son arte de la marca; sustitúyelas por fotos y videos reales.
   galeria:[
@@ -30,7 +27,7 @@ const P=window.PERF||{n:16,t:8,on(){}};
 const IMG={donde:"donde-s","donde-xl":"donde"},RS=document.documentElement.style,got=new Set();
 const ld=(...a)=>a.forEach(k=>{if(!got.has(k)){got.add(k);RS.setProperty("--u-"+k,`url(${new URL(`img/${IMG[k]||k}.webp`,document.baseURI).href})`)}});
 $$("[data-wa]").forEach(a=>a.href=waLink(a.dataset.wa));
-$("#yr").textContent=new Date().getFullYear();
+{const yr=$("#yr");if(yr)yr.textContent=new Date().getFullYear()}
 
 /* navegación */
 const menu=$("#menu"),burger=$("#burger"),hd=$("header"),scrim=$("#scrim"),prog=$("#prog");
@@ -109,7 +106,7 @@ function draw(v){
 
 /* videos de música */
 const V=$("#vids");
-if(!CONFIG.videos.length)V.append(el("div","vsoon",`<div><p class="pin2">Muy pronto, escúchanos tocar</p><p class="note" style="margin:.4rem 0 1.2rem">Estamos preparando nuestros videos. Mientras tanto, síguenos en Instagram.</p><a class="btn gold" href="https://www.instagram.com/erik_dxc_official/" target="_blank" rel="noopener">ESCÚCHANOS EN INSTAGRAM</a></div>`));
+if(!CONFIG.videos.length)V.remove();
 CONFIG.videos.forEach((v,i)=>{const th=v.thumb||(v.tipo==="youtube"?`https://i.ytimg.com/vi/${ytId(v.src)}/hqdefault.jpg`:"");
   const b=el("button","vc rv"+(v.vertical?" v":""),`${th?`<span class="gm" style="background-image:url('${esc(th)}')"></span>`:""}<span class="play" aria-hidden="true">▶</span><span class="cap">${esc(v.titulo||"")}</span>`);
   b.setAttribute("aria-label","Reproducir: "+(v.titulo||""));b.onclick=()=>show(CONFIG.videos,i);V.append(b);ro.observe(b)});
