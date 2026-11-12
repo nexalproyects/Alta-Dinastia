@@ -1,20 +1,23 @@
 /* ========= CONFIG: edita aquí el contenido ========= */
-const WA="528713596173";
+const WA="528717972928";
 const CONFIG={
   // Videos de Música: {titulo, tipo:"video|youtube|instagram", src, thumb, vertical, cors}
   // "video" = archivo alojado (mp4). El ecualizador solo reacciona si el archivo es del mismo sitio o tiene CORS (cors:true).
-  videos:[],
-  // Galería: {titulo, tipo:"foto|video|youtube|instagram", src, thumb, cat, fit, sz:[columnas,filas], pt:1 (casilla vertical para videos de celular)}
+  videos:[
+    {titulo:"En vivo · Noche en la calle",tipo:"video",src:"video/video2.mp4",thumb:"img/video2-poster.webp",vertical:true},
+    {titulo:"En vivo · Azotea",tipo:"video",src:"video/video3.mp4",thumb:"img/video3-poster.webp",vertical:true}
+  ],
+  // Galería: {titulo, tipo:"foto|video|youtube|instagram", src, thumb, cat, fit}
   // Las 5 piezas siguientes son arte de la marca; sustitúyelas por fotos y videos reales.
   galeria:[
-    {tipo:"video",titulo:"En vivo · Noche en la calle",src:"video/video2.mp4",thumb:"img/video2-poster.webp",cat:"En vivo",pt:1},
-    {tipo:"foto",bg:"var(--u-banner)",titulo:"En el escenario",fit:"contain",cat:"Marca",sz:[4,2]},
-    {tipo:"video",titulo:"En vivo · Azotea",src:"video/video3.mp4",thumb:"img/video3-poster.webp",cat:"En vivo",pt:1},
-    {tipo:"video",titulo:"Detrás de cámaras · Montaje",src:"video/video1.mp4",thumb:"img/video1-poster.webp",cat:"En vivo",pt:1},
-    {tipo:"foto",bg:"var(--u-instr)",titulo:"Acordeón y guitarra",cat:"Marca",sz:[2,2]},
-    {tipo:"foto",bg:"var(--u-circ)",titulo:"El comienzo de algo grande",fit:"contain",cat:"Marca",sz:[2,2]},
-    {tipo:"foto",bg:"var(--u-hero)",titulo:"ALTA DINASTÍA",cat:"Marca",sz:[2,2]},
-    {tipo:"foto",bg:"var(--u-donde)",titulo:"Cobertura en Torreón",fit:"contain",cat:"Marca",sz:[2,2]}
+    {tipo:"video",titulo:"En vivo · Noche en la calle",src:"video/video2.mp4",thumb:"img/video2-poster.webp",cat:"En vivo"},
+    {tipo:"foto",bg:"var(--u-banner)",titulo:"En el escenario",cat:"Marca"},
+    {tipo:"video",titulo:"En vivo · Azotea",src:"video/video3.mp4",thumb:"img/video3-poster.webp",cat:"En vivo"},
+    {tipo:"foto",bg:"var(--u-instr)",titulo:"Acordeón y guitarra",cat:"Marca"},
+    {tipo:"foto",bg:"var(--u-circ)",titulo:"El comienzo de algo grande",fit:"contain",cat:"Marca"},
+    {tipo:"video",titulo:"Detrás de cámaras · Montaje",src:"video/video1.mp4",thumb:"img/video1-poster.webp",cat:"En vivo"},
+    {tipo:"foto",bg:"var(--u-hero)",titulo:"ALTA DINASTÍA",cat:"Marca"},
+    {tipo:"foto",bg:"var(--u-donde)",titulo:"Cobertura en Torreón",cat:"Marca"}
   ]
 };
 /* ==================================================== */
@@ -40,7 +43,8 @@ const A=$(".art");let sMax=0,tick=0,lastT=-1;
 const calc=()=>{sMax=document.documentElement.scrollHeight-innerHeight};calc();
 addEventListener("resize",calc,{passive:true});addEventListener("load",calc);
 if(window.ResizeObserver)new ResizeObserver(calc).observe(document.body);
-function onScroll(){tick=0;const y=scrollY;hd.classList.toggle("scrolled",y>30);prog.style.transform="scaleX("+(sMax>0?Math.min(y/sMax,1):0)+")";const t=Math.min(y,700)*.1;if(A&&!REDUCE&&t!==lastT){lastT=t;A.style.translate="0 "+t+"px"}}
+const de=document.documentElement;let scrT=0,scrOn=0,ws=null;
+function onScroll(){tick=0;const y=scrollY;if(!scrOn){scrOn=1;de.classList.add("scr")}clearTimeout(scrT);scrT=setTimeout(()=>{scrOn=0;de.classList.remove("scr")},140);const sc=y>30;if(sc!==ws){ws=sc;hd.classList.toggle("scrolled",sc)}prog.style.transform="scaleX("+(sMax>0?Math.min(y/sMax,1):0)+")";const t=Math.min(y,700)*.1;if(A&&!REDUCE&&!P.coarse&&t!==lastT){lastT=t;A.style.translate="0 "+t+"px"}}
 addEventListener("scroll",()=>{if(!tick){tick=1;requestAnimationFrame(onScroll)}},{passive:true});onScroll();
 const links=$$("ul a",menu);
 const nav=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});
@@ -119,8 +123,8 @@ function drawGallery(){
   G.innerHTML="";const list=CONFIG.galeria.filter(g=>cat==="Todo"||g.cat===cat);
   list.forEach((g,i)=>{
     const th=g.thumb||(g.tipo==="foto"?g.src:(g.tipo==="youtube"?`https://i.ytimg.com/vi/${ytId(g.src)}/hqdefault.jpg`:""));
-    const bg=g.bg||(th?`url('${esc(th)}')`:"none"),[c,r]=g.pt?[2,4]:(g.sz||SZ[i%SZ.length]);
-    const b=el("button","gi"+(g.pt?" pt":"")+(g.sz&&g.sz[0]>=4?" wd":""),`<span class="gm" style="background-image:${bg};${g.fit?"background-size:"+g.fit:""}"></span>${g.tipo!=="foto"?'<span class="play" aria-hidden="true">▶</span>':""}<span class="cap">${esc(g.titulo||"")}</span>`);
+    const bg=g.bg||(th?`url('${esc(th)}')`:"none"),[c,r]=SZ[i%SZ.length];
+    const b=el("button","gi",`<span class="gm" style="background-image:${bg};${g.fit?"background-size:"+g.fit:""}"></span>${g.tipo!=="foto"?'<span class="play" aria-hidden="true">▶</span>':""}<span class="cap">${esc(g.titulo||"")}</span>`);
     b.style.cssText=`--c:${c};--r:${r};--d:${(i%5)*.12}s`;
     b.setAttribute("aria-label",(g.tipo==="foto"?"Ampliar: ":"Reproducir: ")+(g.titulo||""));
     b.onclick=()=>show(list,i);G.append(b)});
@@ -134,8 +138,8 @@ const C=$("#cov"),openCov=()=>show([{tipo:"foto",bg:"var(--u-donde)",titulo:"Cob
 C.onclick=openCov;C.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openCov()}});
 
 /* ambiente del inicio */
-const spot=el("div","spot");spot.setAttribute("aria-hidden","true");document.body.append(spot);
-const putSpot=(x,y)=>{spot.style.transform=`translate3d(${x-520}px,${y-520}px,0)`};putSpot(innerWidth*.5,innerHeight*.3);
+const spot=P.coarse?null:el("div","spot");if(spot){spot.setAttribute("aria-hidden","true");document.body.append(spot)}
+const putSpot=(x,y)=>{if(spot)spot.style.transform=`translate3d(${x-520}px,${y-520}px,0)`};putSpot(innerWidth*.5,innerHeight*.3);
 if(!REDUCE){
   const NB=$("#notes"),SY=["♪","♫","♬","♩"];
   for(let i=0;i<P.n;i++){const s=el("span","",SY[i%4]);s.style.cssText=`left:${Math.random()*100}%;font-size:${14+Math.random()*22}px;animation-duration:${11+Math.random()*12}s;animation-delay:-${Math.random()*20}s`;NB.append(s)}
