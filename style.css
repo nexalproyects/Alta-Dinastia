@@ -341,7 +341,14 @@ body::after{display:none}
 @media(hover:none){.btn:hover,.card:hover,.ins:hover,.cbtn:hover,.soc a:hover,#wa:hover,.cbtn:hover .ico,.vc:hover .gm,.gi.in:hover .gm{transform:none}}
 @media(pointer:coarse){.tabs button{min-height:44px}.pv,.nx{width:48px;height:48px;margin-top:-24px}}
 
-/* galería: videos verticales de celular */
-.gi.pt .gm{background-position:center 30%}
-@media(max-width:700px){.gi.pt,.gi.pt:nth-child(3n+1){grid-column:span 1;grid-row:span 3}}
-@media(max-width:700px){.gi.wd,.gi.wd:nth-child(3n+1){grid-column:span 2;grid-row:span 1}}
+/* ===== v7: scroll fluido en móvil ===== */
+#esencia,#musica,#galeria,#contratar,#contacto,footer{content-visibility:auto;contain-intrinsic-size:auto 720px}
+[data-fx~=lite] .beams i,[data-fx~=lite] .ess::before,[data-fx~=lite] .btn.gold::after,[data-fx~=lite] .sheen::before{will-change:auto}
+[data-fx~=still] .ess::before{inset:0}
+[data-fx~=lite] .notes span{text-shadow:none}
+[data-fx~=lite] .tws i{filter:none}
+[data-fx~=lite] #inicio .sub,[data-fx~=lite] #inicio .cta{animation:none}
+html[data-fx~=lite].scr .notes span,html[data-fx~=lite].scr .beams i,html[data-fx~=lite].scr .tws i,
+html[data-fx~=lite].scr .marquee>div,html[data-fx~=lite].scr .sheen::before,html[data-fx~=lite].scr .btn.gold::after,
+html[data-fx~=lite].scr .art::after,html[data-fx~=lite].scr #contratar::before,html[data-fx~=lite].scr .ess::before{animation-play-state:paused!important}
+@media(hover:none),(pointer:coarse){.spot{display:none}}
