@@ -1,5 +1,5 @@
 /* ========= CONFIG: edita aquí el contenido ========= */
-const WA="528717972928";
+const WA="+528717972928";/* ========= CONFIG: edita aquí el contenido ========= */
 const CONFIG={
   // Videos de Música: {titulo, tipo:"video|youtube|instagram", src, thumb, vertical, cors}
   // "video" = archivo alojado (mp4). El ecualizador solo reacciona si el archivo es del mismo sitio o tiene CORS (cors:true).
@@ -152,6 +152,43 @@ $("#quote").addEventListener("submit",e=>{
   const d=Object.fromEntries(new FormData(f)),[y,m,dd]=d.fecha.split("-");
   window.open(waLink(`Hola, quiero solicitar una cotización con ALTA DINASTÍA.\n\nNombre: ${d.nombre}\nTipo de evento: ${d.tipo}\nFecha: ${dd}/${m}/${y}\nUbicación: ${d.lugar}\nHorario aproximado: ${d.hora||"Por definir"}\nInformación adicional: ${d.extra||"Ninguna"}`),"_blank","noopener");
 });
+/* música de fondo (Factura): arranca con el primer gesto del usuario.
+   Los navegadores bloquean el audio sin interacción; tocar, hacer clic o pulsar una tecla lo desbloquea.
+   Girar la rueda o deslizar se intenta también, pero solo funciona donde el navegador lo permite. */
+{
+  const SRC="audio/factura.mp3",VOL=.7;
+  let a=null,want=true,vid=false,hid=false,fade=0;
+  try{want=localStorage.getItem("ad-bgm")!=="off"}catch(e){}
+  const btn=el("button","","");btn.id="bgm";btn.type="button";
+  const svg=p=>`<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
+  const IC_ON=svg('<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>');
+  const IC_OFF=svg('<path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6m0-6 6 6"/>');
+  const sync=()=>{const on=!!a&&!a.paused;btn.innerHTML=on?IC_ON:IC_OFF;btn.setAttribute("aria-pressed",on);btn.setAttribute("aria-label",on?"Pausar música":"Reproducir música")};
+  const get=()=>{if(!a){a=new Audio(SRC);a.loop=true;a.preload="none";a.addEventListener("play",sync);a.addEventListener("pause",sync)}return a};
+  const start=()=>{
+    const x=get(),p=x.play();
+    if(p&&p.then)p.then(()=>{off();clearInterval(fade);x.volume=0;let v=0;fade=setInterval(()=>{v=Math.min(VOL,v+VOL/25);x.volume=v;if(v>=VOL)clearInterval(fade)},60)}).catch(()=>{});
+    return p;
+  };
+  const EV=["pointerdown","pointerup","click","touchend","touchmove","keydown","wheel"];
+  const gesture=e=>{if(want&&!btn.contains(e.target))start()};
+  const on=()=>EV.forEach(t=>addEventListener(t,gesture,{passive:true,capture:true}));
+  const off=()=>EV.forEach(t=>removeEventListener(t,gesture,{capture:true}));
+  btn.onclick=()=>{
+    if(a&&!a.paused){want=false;a.pause()}else{want=true;start()}
+    try{localStorage.setItem("ad-bgm",want?"on":"off")}catch(e){}
+  };
+  document.body.append(btn);sync();
+  if(want){on();start()}   /* si el navegador ya lo permite, suena desde el inicio */
+  /* los videos de la galería tienen prioridad: se pausa la música y vuelve al cerrar el visor */
+  document.addEventListener("play",e=>{if(e.target.tagName==="VIDEO"&&a&&!a.paused){vid=true;a.pause()}},true);
+  lb.addEventListener("close",()=>{if(vid){vid=false;if(want)start()}});
+  /* pestaña oculta: en pausa */
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden){if(a&&!a.paused){hid=true;a.pause()}}
+    else if(hid){hid=false;if(want&&!vid)start()}
+  });
+}
 /* si el perfil baja de nivel en vivo, se retiran partículas sobrantes sin tocar el diseño */
 P.on(p=>{$$("#notes span").slice(p.n).forEach(s=>s.remove());$$("#tws i").slice(p.t).forEach(s=>s.remove())});
 if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
