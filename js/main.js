@@ -156,7 +156,7 @@ $("#quote").addEventListener("submit",e=>{
    Los navegadores bloquean el audio sin interacción; tocar, hacer clic o pulsar una tecla lo desbloquea.
    Girar la rueda o deslizar se intenta también, pero solo funciona donde el navegador lo permite. */
 {
-  const SRC="audio/factura.mp3",VOL=.7;
+  const SRC="audio/factura-v2.mp3",VOL=.7;
   let a=null,want=true,vid=false,hid=false,fade=0;
   try{want=localStorage.getItem("ad-bgm")!=="off"}catch(e){}
   const btn=el("button","","");btn.id="bgm";btn.type="button";
