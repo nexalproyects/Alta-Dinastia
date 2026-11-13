@@ -354,4 +354,13 @@ html[data-fx~=lite].scr .art::after,html[data-fx~=lite].scr #contratar::before,h
 @media(hover:none),(pointer:coarse){.spot{display:none}}
 
 /* tarjetas sin texto (el nombre sigue en aria-label para lectores de pantalla) */
-.gi .cap,.vc .cap{display:none!important}
+.gi .cap,.vc .cap{display:none!important}/* ===== v8: IG de integrantes + botón de música ===== */
+.mhd{font:600 .78rem var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:1.8rem 0 0}
+.cbtns.mem{margin-top:.8rem;gap:.7rem}
+.mem .cbtn{padding:.7rem 1.2rem}
+.mem .cbtn .ico{width:38px;height:38px}
+.mem .cbtn b{font-size:.98rem}
+#bgm{position:fixed;left:max(1rem,env(safe-area-inset-left));bottom:max(1rem,env(safe-area-inset-bottom));z-index:55;width:48px;height:48px;padding:0;border-radius:50%;border:1px solid rgba(213,166,74,.6);background:rgba(16,17,20,.82);color:var(--gold);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5);transition:transform .25s,border-color .25s,background .25s}
+#bgm:hover{transform:scale(1.08);border-color:var(--gold)}
+#bgm svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#bgm[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:var(--ivory)}
